@@ -1645,7 +1645,6 @@ int APS5_VABI _ZN7WebCore11startOfWordERKNS_15VisiblePositionENS_9EWordSideE();
 int APS5_VABI _ZN7WebCore12BlobRegistry16blobRegistryImplEv();
 int APS5_VABI _ZN7WebCore12CSSStyleRule15setSelectorTextERKN3WTF6StringE();
 int APS5_VABI _ZN7WebCore12CSSStyleRule5styleEv();
-int APS5_VABI _ZN7WebCore12CryptoKeyAES9importRawENS_25CryptoAlgorithmIdentifierEON3WTF6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMallocEEEbi();
 int APS5_VABI _ZN7WebCore12DOMTokenList6tokensEv();
 int APS5_VABI _ZN7WebCore12DataTransferD1Ev();
 int APS5_VABI _ZN7WebCore12DataTransferD2Ev();

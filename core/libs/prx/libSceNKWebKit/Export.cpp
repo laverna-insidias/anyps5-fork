@@ -14460,10 +14460,6 @@ int APS5_VABI _ZN7WebCore12CSSStyleRule5styleEv() {
     NotImplemented_nid_no_patch(__func__);
 }
 
-int APS5_VABI _ZN7WebCore12CryptoKeyAES9importRawENS_25CryptoAlgorithmIdentifierEON3WTF6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMallocEEEbi() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
 int APS5_VABI _ZN7WebCore12DOMTokenList6tokensEv() {
     NotImplemented_nid_no_patch(__func__);
 }
