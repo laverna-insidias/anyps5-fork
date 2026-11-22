@@ -72,6 +72,7 @@
 #include "prx/libSceNKWebKit/include/WtfThreadingExports.hpp"
 #include "prx/libSceNKWebKit/include/SerializedCryptoKeyWrapExports.hpp"
 #include "prx/libSceNKWebKit/include/CryptoAlgorithmAesCbcExports.hpp"
+#include "prx/libSceNKWebKit/include/CryptoKeyEcExports.hpp"
 #include "prx/libSceNKWebKit/include/SettingsBaseDefaultsExports.hpp"
 #include "prx/libSceNKWebKit/include/WebCoreProcessSwitchesExports.hpp"
 #include "prx/libSceNKWebKit/include/WtfConcurrentPtrHashSet.hpp"
