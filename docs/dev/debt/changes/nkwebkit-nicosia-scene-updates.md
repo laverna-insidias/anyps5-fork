@@ -1,0 +1,5 @@
+# libSceNKWebKit
+
+## add Functional
+
+- [Nicosia::Scene and Nicosia::SceneIntegration](../../../core/libs/prx/libSceNKWebKit/src/NicosiaScene.cpp) (libSceNKWebKit) - not compared with a console module. Construction, destruction, `create`, `Scene::State` copy and assignment, `setClient`, `invalidate` and `requestUpdate` follow the pinned [NicosiaScene.cpp](https://github.com/neonmodder123/PS5-WebKit-11.x/blob/80f77e94c63ee7202eec3d4b5b1a021dd89011ba/Source/WebCore/platform/graphics/nicosia/NicosiaScene.cpp) and [NicosiaSceneIntegration.cpp](https://github.com/neonmodder123/PS5-WebKit-11.x/blob/80f77e94c63ee7202eec3d4b5b1a021dd89011ba/Source/WebCore/platform/graphics/nicosia/NicosiaSceneIntegration.cpp). `HashSet<RefPtr<CompositionLayer>>` uses the shared WTF table model, and layers are released through their deleting destructor. The layouts are unverified. `createUpdateScope` still throws, because its scope's destructor flushes `CompositionLayer` state, which is not implemented. Closes when: compared with a console module.
