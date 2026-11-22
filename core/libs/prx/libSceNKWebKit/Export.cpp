@@ -278,10 +278,6 @@ int APS5_VABI _ZN7WebCore8JSDOMURL6createEPN3JSC9StructureEPNS_17JSDOMGlobalObje
     NotImplemented_nid_no_patch(__func__);
 }
 
-int APS5_VABI _ZN7WebCore9CSSParser10parseColorERKN3WTF6StringEb() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
 int APS5_VABI _ZN7WebCore15GraphicsContextC1EPNS_20PlatformContextCairoE() {
     NotImplemented_nid_no_patch(__func__);
 }

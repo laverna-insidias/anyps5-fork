@@ -1,0 +1,5 @@
+# libSceNKWebKit
+
+## add Older callable exports
+
+- [WebCore::CSSParser::parseColor](../../../core/libs/prx/libSceNKWebKit/src/WebCoreCSSParserColor.cpp) (NID `0JxNOxFh7mU`): not compared with a console module. The signature follows [WebKit 73a35b43](https://github.com/WebKit/WebKit/blob/73a35b43be7ae44c084885bd3fa4b403e59723c8/Source/WebCore/css/parser/CSSParser.cpp#L97-L109); the result uses the inline sRGBA encoding of the other `Color` exports. Only the pinned [fast path](https://github.com/neonmodder123/PS5-WebKit-11.x/blob/80f77e94c63ee7202eec3d4b5b1a021dd89011ba/Source/WebCore/css/parser/CSSParserFastPaths.cpp#L188-L571) is implemented: hex, comma-separated `rgb()` and `rgba()`, and [named colors](https://github.com/neonmodder123/PS5-WebKit-11.x/blob/80f77e94c63ee7202eec3d4b5b1a021dd89011ba/Source/WebCore/platform/ColorData.gperf). A null or empty string gives the invalid color; any other string throws through `NotImplemented_nid_no_patch`. Closes when: the full parser fallback exists and a console module is compared.

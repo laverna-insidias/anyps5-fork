@@ -139,6 +139,7 @@ WebCore::Color* APS5_VABI _ZNK7WebCore5Color14colorWithAlphaEf(WebCore::Color* r
 WebCore::Color* APS5_VABI _ZNK7WebCore5Color8darkenedEv(WebCore::Color* result, const WebCore::Color* self);
 WebCore::Color* APS5_VABI _ZNK7WebCore5Color9lightenedEv(WebCore::Color* result, const WebCore::Color* self);
 double APS5_VABI _ZNK7WebCore5Color9lightnessEv(const WebCore::Color* self);
+WebCore::Color* APS5_VABI _ZN7WebCore9CSSParser10parseColorERKN3WTF6StringEb(WebCore::Color* result, const NKWebKit::WtfAbi::String& string, bool strict);
 double APS5_VABI _ZNK7WebCore5Color9luminanceEv(const WebCore::Color* self);
 bool APS5_VABI _ZNK7WebCore7IntRect10intersectsERKS0_(const WebCore::IntRect* self, const WebCore::IntRect& other);
 bool APS5_VABI _ZNK7WebCore7IntRect8containsERKS0_(const WebCore::IntRect* self, const WebCore::IntRect& other);
