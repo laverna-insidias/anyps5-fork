@@ -8,6 +8,7 @@
 #include "prx/libSceNKWebKit/include/LegacySecurityOriginTupleExports.hpp"
 #include "prx/libSceNKWebKit/include/ParallelEnvironmentExports.hpp"
 #include "prx/libSceNKWebKit/include/SecurityPolicyExports.hpp"
+#include "prx/libSceNKWebKit/include/NicosiaContentLayerExports.hpp"
 #include "prx/libSceNKWebKit/include/VaryingRequestHeadersExports.hpp"
 #include "prx/libSceNKWebKit/include/WebCoreRegistrationSlotsExports.hpp"
 #include "prx/libSceNKWebKit/include/CredentialBaseExports.hpp"

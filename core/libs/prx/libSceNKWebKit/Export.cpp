@@ -906,10 +906,6 @@ int APS5_VABI _ZN7WebCore12JSTimeRanges6createEPN3JSC9StructureEPNS_17JSDOMGloba
     NotImplemented_nid_no_patch(__func__);
 }
 
-int APS5_VABI _ZN7Nicosia29ContentLayerTextureMapperImpl11flushUpdateEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
 int APS5_VABI _ZN7WebCore13MediaQuerySet6createERKN3WTF6StringENS_23MediaQueryParserContextE() {
     NotImplemented_nid_no_patch(__func__);
 }
@@ -2655,10 +2651,6 @@ int APS5_VABI _ZNK7WebCore9FrameView22baseLayoutViewportSizeEv() {
 }
 
 int APS5_VABI _ZN7WebCore19InspectorController13willCompositeERNS_5FrameE() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
-int APS5_VABI _ZN7Nicosia29ContentLayerTextureMapperImpl19swapBuffersIfNeededEv() {
     NotImplemented_nid_no_patch(__func__);
 }
 
