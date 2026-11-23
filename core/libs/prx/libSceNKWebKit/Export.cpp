@@ -2284,10 +2284,6 @@ int APS5_VABI _ZN7WebCore5Frame27injectUserScriptImmediatelyERNS_15DOMWrapperWor
     NotImplemented_nid_no_patch(__func__);
 }
 
-int APS5_VABI _ZN7Nicosia29BackingStoreTextureMapperImpl10takeUpdateEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
 int APS5_VABI _ZNK7WebCore11HTMLElement4formEv() {
     NotImplemented_nid_no_patch(__func__);
 }
@@ -7370,10 +7366,6 @@ int APS5_VABI _ZN7WebCore31TextureMapperPlatformLayerProxy10invalidateEv() {
 }
 
 int APS5_VABI _ZN7WebCore15GraphicsContext8fillPathERKNS_4PathE() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
-int APS5_VABI _ZN7Nicosia29BackingStoreTextureMapperImpl11flushUpdateEv() {
     NotImplemented_nid_no_patch(__func__);
 }
 
