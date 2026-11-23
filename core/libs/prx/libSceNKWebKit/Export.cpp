@@ -2968,10 +2968,6 @@ int APS5_VABI _ZNK7WebCore18TextureMapperLayer15fixedToViewportEv() {
     NotImplemented_nid_no_patch(__func__);
 }
 
-int APS5_VABI _ZN7Nicosia29ImageBackingTextureMapperImpl10takeUpdateEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
 int APS5_VABI _ZNK7WebCore12SharedBuffer23hintMemoryNotNeededSoonEv() {
     NotImplemented_nid_no_patch(__func__);
 }
@@ -7254,10 +7250,6 @@ int APS5_VABI libSceNKWebKitLegacyUnknown_t9XUoJbebeo_nid_no_patch() {
     NotImplemented_nid_no_patch(__func__);
 }
 APS5_EXPORT("t9XUoJbebeo", libSceNKWebKitLegacyUnknown_t9XUoJbebeo_nid_no_patch);
-
-int APS5_VABI _ZN7Nicosia29ImageBackingTextureMapperImpl11flushUpdateEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
 
 int APS5_VABI _ZN7WebCore20DecodeOrderSampleMap20findDependentSamplesEPNS_11MediaSampleE() {
     NotImplemented_nid_no_patch(__func__);
