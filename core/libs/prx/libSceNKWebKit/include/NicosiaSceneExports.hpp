@@ -28,5 +28,7 @@ NKWebKit::NicosiaAbi::SceneIntegrationRef* APS5_VABI _ZN7Nicosia16SceneIntegrati
 void APS5_VABI _ZN7Nicosia16SceneIntegration9setClientERNS0_6ClientE(NKWebKit::NicosiaAbi::SceneIntegration* self, NKWebKit::NicosiaAbi::SceneIntegrationClient* client);
 void APS5_VABI _ZN7Nicosia16SceneIntegration10invalidateEv(NKWebKit::NicosiaAbi::SceneIntegration* self);
 void APS5_VABI _ZN7Nicosia16SceneIntegration13requestUpdateEv(NKWebKit::NicosiaAbi::SceneIntegration* self);
+NKWebKit::NicosiaAbi::SceneIntegrationUpdateScopePtr* APS5_VABI _ZN7Nicosia16SceneIntegration17createUpdateScopeEv(
+    NKWebKit::NicosiaAbi::SceneIntegrationUpdateScopePtr* result, NKWebKit::NicosiaAbi::SceneIntegration* self);
 
 }

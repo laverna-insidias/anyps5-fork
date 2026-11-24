@@ -18,6 +18,8 @@ using NKWebKit::NicosiaAbi::SceneIntegration;
 using NKWebKit::NicosiaAbi::SceneIntegrationClient;
 using NKWebKit::NicosiaAbi::SceneIntegrationClientVtable;
 using NKWebKit::NicosiaAbi::SceneIntegrationRef;
+using NKWebKit::NicosiaAbi::SceneIntegrationUpdateScope;
+using NKWebKit::NicosiaAbi::SceneIntegrationUpdateScopePtr;
 using NKWebKit::NicosiaAbi::SceneRef;
 using NKWebKit::NicosiaAbi::SceneState;
 
@@ -279,6 +281,7 @@ constexpr auto assign = &_ZN7Nicosia5Scene5StateaSERKS1_;
 constexpr auto setClient = &_ZN7Nicosia16SceneIntegration9setClientERNS0_6ClientE;
 constexpr auto invalidate = &_ZN7Nicosia16SceneIntegration10invalidateEv;
 constexpr auto requestUpdate = &_ZN7Nicosia16SceneIntegration13requestUpdateEv;
+constexpr auto createUpdateScope = &_ZN7Nicosia16SceneIntegration17createUpdateScopeEv;
 
 static void TestADefaultState() {
     for (const auto construct : stateDefault)
@@ -687,6 +690,41 @@ static void TestInvalidArguments() {
     GuestDeref(scene);
 }
 
+static void TestTheUpdateScope() {
+    Scene* scene = NewScene();
+    TestClient client{{&clientVtable}};
+    SceneIntegrationRef reference{};
+    _ZN7Nicosia16SceneIntegration6createERNS_5SceneERNS0_6ClientE(&reference, scene, &client.base);
+    SceneIntegration* integration = reference.ptr;
+    alignas(8) unsigned char bytes[8];
+    std::memset(bytes, 0xA5, sizeof(bytes));
+    auto* holder = reinterpret_cast<SceneIntegrationUpdateScopePtr*>(bytes);
+    Require(createUpdateScope(holder, integration) == holder);
+    SceneIntegrationUpdateScope* scope = holder->ptr;
+    Require(scope && scope->sceneIntegration == integration && scope->lock == &integration->client.lock);
+    Require(integration->refCount == 2 && integration->client.lock == 1 && client.updates.load() == 0);
+    std::atomic<bool> updated{false};
+    std::thread waiter([&] {
+        requestUpdate(integration);
+        updated = true;
+    });
+    std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    Require(!updated && client.updates.load() == 0);
+    std::atomic_ref<std::uint8_t>(integration->client.lock).store(0, std::memory_order_release);
+    waiter.join();
+    Require(updated && client.updates.load() == 1 && integration->client.lock == 0);
+    --integration->refCount;
+    _ZN3WTF8fastFreeEPv(scope);
+    SceneIntegrationUpdateScopePtr untouched{};
+    Require(ThrowsInvalidArgument([&] { createUpdateScope(nullptr, integration); }));
+    Require(ThrowsInvalidArgument([&] { createUpdateScope(&untouched, nullptr); }));
+    Require(untouched.ptr == nullptr && integration->refCount == 1 && integration->client.lock == 0);
+    invalidate(integration);
+    _ZN7Nicosia16SceneIntegrationD1Ev(integration);
+    _ZN3WTF8fastFreeEPv(integration);
+    GuestDeref(scene);
+}
+
 int main() {
     std::thread([] {
         std::this_thread::sleep_for(std::chrono::seconds(20));
@@ -704,6 +742,7 @@ int main() {
     TestTheLockExcludes();
     TestParkedThreads();
     TestInvalidArguments();
+    TestTheUpdateScope();
     Require(liveLayers == 0 && destroyed.empty());
     std::puts("libSceNKWebKit nicosia scene tests passed");
     return 0;

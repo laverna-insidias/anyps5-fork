@@ -7623,10 +7623,6 @@ int APS5_VABI libSceNKWebKitLegacyUnknown_ySrVsGNCg5M_nid_no_patch() {
 }
 APS5_EXPORT("ySrVsGNCg5M", libSceNKWebKitLegacyUnknown_ySrVsGNCg5M_nid_no_patch);
 
-int APS5_VABI _ZN7Nicosia16SceneIntegration17createUpdateScopeEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
 int APS5_VABI _ZN7WebCore17NowPlayingManager25clearNowPlayingInfoClientERNS0_6ClientE() {
     NotImplemented_nid_no_patch(__func__);
 }

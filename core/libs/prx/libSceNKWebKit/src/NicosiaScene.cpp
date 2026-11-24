@@ -143,6 +143,8 @@ using NKWebKit::NicosiaAbi::Scene;
 using NKWebKit::NicosiaAbi::SceneIntegration;
 using NKWebKit::NicosiaAbi::SceneIntegrationClient;
 using NKWebKit::NicosiaAbi::SceneIntegrationRef;
+using NKWebKit::NicosiaAbi::SceneIntegrationUpdateScope;
+using NKWebKit::NicosiaAbi::SceneIntegrationUpdateScopePtr;
 using NKWebKit::NicosiaAbi::SceneRef;
 using NKWebKit::NicosiaAbi::SceneState;
 
@@ -158,8 +160,13 @@ class Locker {
 public:
     explicit Locker(std::uint8_t& byte)
         : m_byte(byte) {
+        Acquire(byte);
+    }
+
+    static void Acquire(std::uint8_t& byte) {
+        std::atomic_ref<std::uint8_t> lock(byte);
         std::uint8_t expected = 0;
-        while (!m_byte.compare_exchange_weak(expected, kLockHeldBit, std::memory_order_acquire)) {
+        while (!lock.compare_exchange_weak(expected, kLockHeldBit, std::memory_order_acquire)) {
             if (expected & ~kLockHeldBit) throw std::runtime_error("Nicosia::SceneIntegration: the lock has parked threads");
             expected = 0;
             std::this_thread::yield();
@@ -440,6 +447,17 @@ void APS5_VABI _ZN7Nicosia16SceneIntegration13requestUpdateEv(SceneIntegration* 
     SceneIntegration& integration = Checked(self, "Nicosia::SceneIntegration::requestUpdate: null this");
     Locker locker(integration.client.lock);
     if (SceneIntegrationClient* client = integration.client.object) client->vtable->requestUpdate(client);
+}
+
+SceneIntegrationUpdateScopePtr* APS5_VABI _ZN7Nicosia16SceneIntegration17createUpdateScopeEv(SceneIntegrationUpdateScopePtr* result, SceneIntegration* self) {
+    SceneIntegrationUpdateScopePtr& reference = Checked(result, "Nicosia::SceneIntegration::createUpdateScope: null result");
+    SceneIntegration& integration = Checked(self, "Nicosia::SceneIntegration::createUpdateScope: null this");
+    Locker::Acquire(integration.client.lock);
+    auto* scope = static_cast<SceneIntegrationUpdateScope*>(_ZN3WTF10fastMallocEm(sizeof(SceneIntegrationUpdateScope)));
+    std::atomic_ref<unsigned>(integration.refCount).fetch_add(1);
+    *scope = SceneIntegrationUpdateScope{&integration, &integration.client.lock};
+    reference.ptr = scope;
+    return result;
 }
 
 }

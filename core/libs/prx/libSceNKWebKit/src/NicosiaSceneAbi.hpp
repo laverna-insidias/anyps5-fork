@@ -68,6 +68,15 @@ struct SceneIntegrationRef {
     SceneIntegration* ptr;
 };
 
+struct SceneIntegrationUpdateScope {
+    SceneIntegration* sceneIntegration;
+    std::uint8_t* lock;
+};
+
+struct SceneIntegrationUpdateScopePtr {
+    SceneIntegrationUpdateScope* ptr;
+};
+
 static_assert(offsetof(PlatformLayer, refCount) == 8);
 static_assert(sizeof(SceneState) == 24);
 static_assert(offsetof(SceneState, platformLayerUpdated) == 4);
@@ -81,6 +90,8 @@ static_assert(offsetof(SceneIntegration, client) == 8);
 static_assert(offsetof(SceneIntegrationData, scene) == 8);
 static_assert(offsetof(SceneIntegrationData, object) == 16);
 static_assert(offsetof(SceneIntegrationClientVtable, requestUpdate) == 16);
+static_assert(sizeof(SceneIntegrationUpdateScope) == 16);
+static_assert(offsetof(SceneIntegrationUpdateScope, lock) == 8);
 static_assert(std::is_trivially_copyable_v<SceneState>);
 
 }  // namespace NKWebKit::NicosiaAbi
