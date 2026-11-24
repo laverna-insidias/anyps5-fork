@@ -26644,22 +26644,6 @@ int APS5_VABI _ZNK7WebCore22ScriptExecutionContext23domainForCachePartitionEv() 
 }
 
 
-int APS5_VABI _ZNK7WebCore23FrameLoaderStateMachine15firstLayoutDoneEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
-int APS5_VABI _ZNK7WebCore23FrameLoaderStateMachine23committingFirstRealLoadEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
-int APS5_VABI _ZNK7WebCore23FrameLoaderStateMachine28creatingInitialEmptyDocumentEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
-int APS5_VABI _ZNK7WebCore23FrameLoaderStateMachine32isDisplayingInitialEmptyDocumentEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
 
 int APS5_VABI _ZNK7WebCore24CachedResourceHandleBase3getEv() {
     NotImplemented_nid_no_patch(__func__);
