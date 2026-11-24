@@ -1310,8 +1310,6 @@ int APS5_VABI _ZN7WebCore10JSLocationD1Ev();
 int APS5_VABI _ZN7WebCore10JSLocationD2Ev();
 int APS5_VABI _ZN7WebCore10JSLocationaSERKS0_();
 int APS5_VABI _ZN7WebCore10JSNodeList9toWrappedERN3JSC2VMENS1_7JSValueE();
-int APS5_VABI _ZN7WebCore10OriginLockD1Ev();
-int APS5_VABI _ZN7WebCore10OriginLockD2Ev();
 int APS5_VABI _ZN7WebCore10Pasteboard10readOriginEv();
 int APS5_VABI _ZN7WebCore10Pasteboard11writeMarkupERKN3WTF6StringE();
 int APS5_VABI _ZN7WebCore10Pasteboard14writePlainTextERKN3WTF6StringENS0_18SmartReplaceOptionE();
