@@ -92,6 +92,45 @@ int main() {
         }
         Require(thrown && location.boundingBox.m_size.m_width == 0);
     }
+    for (const auto construct : {&_ZN7WebCore15HitTestLocationC1Ev, &_ZN7WebCore15HitTestLocationC2Ev}) {
+        alignas(4) unsigned char bytes[68];
+        std::memset(bytes, 0xA5, sizeof(bytes));
+        construct(reinterpret_cast<LegacyHitTestLocation*>(bytes));
+        for (int i = 0; i < 64; ++i) Require(bytes[i] == 0);
+        Require(bytes[64] == 0 && bytes[65] == 1);
+        bool thrown = false;
+        try {
+            construct(nullptr);
+        } catch (const std::invalid_argument&) {
+            thrown = true;
+        }
+        Require(thrown);
+    }
+    for (const auto copy : {&_ZN7WebCore15HitTestLocationC1ERKS0_, &_ZN7WebCore15HitTestLocationC2ERKS0_}) {
+        LegacyHitTestLocation source{};
+        const WebCore::FloatPoint point{-0.5f, 7.25f};
+        _ZN7WebCore15HitTestLocationC1ERKNS_10FloatPointE(&source, &point);
+        source.isRectBased = true;
+        source.isRectilinear = false;
+        LegacyHitTestLocation target{};
+        copy(&target, &source);
+        Require(std::memcmp(&target, &source, 66) == 0);
+        bool thrown = false;
+        try {
+            copy(nullptr, &source);
+        } catch (const std::invalid_argument&) {
+            thrown = true;
+        }
+        Require(thrown);
+        thrown = false;
+        LegacyHitTestLocation untouched{};
+        try {
+            copy(&untouched, nullptr);
+        } catch (const std::invalid_argument&) {
+            thrown = true;
+        }
+        Require(thrown && untouched.boundingBox.m_size.m_width == 0);
+    }
     std::puts("libSceNKWebKit hit test location tests passed");
     return 0;
 }

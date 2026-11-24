@@ -104,6 +104,19 @@ void Construct(LegacyHitTestLocation* self, const WebCore::FloatPoint* point) {
     self->isRectilinear = true;
 }
 
+void ConstructDefault(LegacyHitTestLocation* self) {
+    if (!self) throw std::invalid_argument("WebCore::HitTestLocation::HitTestLocation: null this");
+    *self = LegacyHitTestLocation{};
+    self->isRectBased = false;
+    self->isRectilinear = true;
+}
+
+void ConstructCopy(LegacyHitTestLocation* self, const LegacyHitTestLocation* other) {
+    if (!self) throw std::invalid_argument("WebCore::HitTestLocation::HitTestLocation: null this");
+    if (!other) throw std::invalid_argument("WebCore::HitTestLocation::HitTestLocation: null WebCore::HitTestLocation");
+    *self = *other;
+}
+
 }  // namespace
 
 extern "C" {
@@ -114,6 +127,22 @@ void APS5_VABI _ZN7WebCore15HitTestLocationC1ERKNS_10FloatPointE(LegacyHitTestLo
 
 void APS5_VABI _ZN7WebCore15HitTestLocationC2ERKNS_10FloatPointE(LegacyHitTestLocation* self, const WebCore::FloatPoint* point) {
     Construct(self, point);
+}
+
+void APS5_VABI _ZN7WebCore15HitTestLocationC1Ev(LegacyHitTestLocation* self) {
+    ConstructDefault(self);
+}
+
+void APS5_VABI _ZN7WebCore15HitTestLocationC2Ev(LegacyHitTestLocation* self) {
+    ConstructDefault(self);
+}
+
+void APS5_VABI _ZN7WebCore15HitTestLocationC1ERKS0_(LegacyHitTestLocation* self, const LegacyHitTestLocation* other) {
+    ConstructCopy(self, other);
+}
+
+void APS5_VABI _ZN7WebCore15HitTestLocationC2ERKS0_(LegacyHitTestLocation* self, const LegacyHitTestLocation* other) {
+    ConstructCopy(self, other);
 }
 
 }
