@@ -5773,10 +5773,6 @@ int APS5_VABI _ZN7WebCore18JSHTMLVideoElementC2EPN3JSC9StructureERNS_17JSDOMGlob
     NotImplemented_nid_no_patch(__func__);
 }
 
-int APS5_VABI _ZN7Nicosia6Buffer25waitUntilPaintingCompleteEv() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
 int APS5_VABI _ZN7WebCore23AuthenticationChallengeC2Ev() {
     NotImplemented_nid_no_patch(__func__);
 }
@@ -12589,18 +12585,6 @@ int APS5_VABI _ZN6WebKit14WebProcessMainEiPPc() {
 }
 
 int APS5_VABI _ZN6WebKit18NetworkProcessMainEiPPc() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
-int APS5_VABI _ZN7Nicosia6Buffer6createERKN7WebCore7IntSizeEj() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
-int APS5_VABI _ZN7Nicosia6BufferD1Ev() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
-int APS5_VABI _ZN7Nicosia6BufferD2Ev() {
     NotImplemented_nid_no_patch(__func__);
 }
 
