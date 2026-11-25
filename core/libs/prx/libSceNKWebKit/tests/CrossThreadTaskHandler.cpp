@@ -34,6 +34,7 @@ constexpr auto destroy = &_ZN3WTF22CrossThreadTaskHandlerD1Ev;
 constexpr auto postTask = &_ZN3WTF22CrossThreadTaskHandler8postTaskEONS_15CrossThreadTaskE;
 constexpr auto postTaskReply = &_ZN3WTF22CrossThreadTaskHandler13postTaskReplyEONS_15CrossThreadTaskE;
 constexpr auto killHandler = &_ZN3WTF22CrossThreadTaskHandler4killEv;
+constexpr auto setCompletion = &_ZN3WTF22CrossThreadTaskHandler21setCompletionCallbackEONS_8FunctionIFvvEEE;
 
 static std::atomic<void*> lastFreed{nullptr};
 
@@ -163,7 +164,8 @@ struct Handler {
     void OnCompletion(const std::string& name, std::function<void()> body = {}) {
         VoidFunction callback = Make(name, std::move(body));
         Require(get()->completionCallback == nullptr);
-        get()->completionCallback = callback.callableWrapper;
+        setCompletion(get(), &callback);
+        Require(callback.callableWrapper == nullptr && get()->completionCallback != nullptr);
     }
 
     void Sync() {
@@ -343,6 +345,37 @@ static void TestTheCompletionCallback() {
     Require(TakeLog().empty() && liveCallables.load() == 0);
 }
 
+static void TestReplacingTheCompletionCallback() {
+    {
+        Handler handler;
+        std::atomic<bool> completed{false};
+        handler.OnCompletion("first");
+        VoidFunction second = Make("second", [&] { completed = true; });
+        setCompletion(handler.get(), &second);
+        Require(second.callableWrapper == nullptr);
+        Require(Same(TakeLog(), {"delete:first:main"}));
+        handler.Sync();
+        killHandler(handler.get());
+        Wait(completed);
+        Settle();
+        Require(Same(TakeLog(), {"call:second:other"}));
+    }
+    Require(Same(TakeLog(), {"delete:second:main"}));
+    {
+        Handler handler;
+        handler.OnCompletion("dropped");
+        VoidFunction empty{nullptr};
+        setCompletion(handler.get(), &empty);
+        Require(handler.get()->completionCallback == nullptr);
+        Require(Same(TakeLog(), {"delete:dropped:main"}));
+        handler.Sync();
+        killHandler(handler.get());
+        Settle();
+        Require(TakeLog().empty());
+    }
+    Require(TakeLog().empty() && liveCallables.load() == 0);
+}
+
 static void TestDestruction() {
     Handler handler;
     std::atomic<bool> started{false};
@@ -374,6 +407,7 @@ static void TestDestruction() {
     Require(ThrowsInvalidArgument([&] { postTask(handler.get(), &function); }));
     Require(ThrowsInvalidArgument([&] { postTaskReply(handler.get(), &function); }));
     Require(ThrowsInvalidArgument([&] { killHandler(handler.get()); }));
+    Require(ThrowsInvalidArgument([&] { setCompletion(handler.get(), &function); }));
 }
 
 static void TestTheDeletingDestructor() {
@@ -406,6 +440,8 @@ static void TestNullArguments() {
     Require(ThrowsInvalidArgument([&] { postTaskReply(handler.get(), nullptr); }));
     Require(ThrowsInvalidArgument([&] { postTaskReply(handler.get(), &function); }));
     Require(ThrowsInvalidArgument([&] { killHandler(nullptr); }));
+    Require(ThrowsInvalidArgument([&] { setCompletion(nullptr, &task); }));
+    Require(ThrowsInvalidArgument([&] { setCompletion(handler.get(), nullptr); }));
     Require(task.callableWrapper != nullptr);
     handler.Sync();
     DrainMain();
@@ -434,6 +470,7 @@ int main() {
     TestKill();
     TestTheEmptyTask();
     TestTheCompletionCallback();
+    TestReplacingTheCompletionCallback();
     TestDestruction();
     TestTheDeletingDestructor();
     TestNullArguments();

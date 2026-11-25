@@ -14,5 +14,6 @@ void APS5_VABI _ZN3WTF22CrossThreadTaskHandlerD2Ev(NKWebKit::WtfAbi::CrossThread
 void APS5_VABI _ZN3WTF22CrossThreadTaskHandler8postTaskEONS_15CrossThreadTaskE(NKWebKit::WtfAbi::CrossThreadTaskHandler* self, NKWebKit::WtfAbi::VoidFunction* task);
 void APS5_VABI _ZN3WTF22CrossThreadTaskHandler13postTaskReplyEONS_15CrossThreadTaskE(NKWebKit::WtfAbi::CrossThreadTaskHandler* self, NKWebKit::WtfAbi::VoidFunction* task);
 void APS5_VABI _ZN3WTF22CrossThreadTaskHandler4killEv(NKWebKit::WtfAbi::CrossThreadTaskHandler* self);
+void APS5_VABI _ZN3WTF22CrossThreadTaskHandler21setCompletionCallbackEONS_8FunctionIFvvEEE(NKWebKit::WtfAbi::CrossThreadTaskHandler* self, NKWebKit::WtfAbi::VoidFunction* completionCallback);
 
 }

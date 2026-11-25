@@ -271,4 +271,14 @@ void APS5_VABI _ZN3WTF22CrossThreadTaskHandler4killEv(CrossThreadTaskHandler* se
     state.condition.notify_all();
 }
 
+void APS5_VABI _ZN3WTF22CrossThreadTaskHandler21setCompletionCallbackEONS_8FunctionIFvvEEE(CrossThreadTaskHandler* self, VoidFunction* completionCallback) {
+    CrossThreadTaskHandlerState& state = StateOf(self);
+    VoidCallableWrapper* callable = std::exchange(Checked(completionCallback).callableWrapper, nullptr);
+    {
+        std::lock_guard lock(state.mutex);
+        std::swap(callable, self->completionCallback);
+    }
+    Delete(callable);
+}
+
 }
