@@ -11,6 +11,7 @@
 #include "prx/libSceNKWebKit/include/ParallelEnvironmentExports.hpp"
 #include "prx/libSceNKWebKit/include/NicosiaSceneExports.hpp"
 #include "prx/libSceNKWebKit/include/SecurityPolicyExports.hpp"
+#include "prx/libSceNKWebKit/include/StaticNodeListExports.hpp"
 #include "prx/libSceNKWebKit/include/VaryingRequestHeadersExports.hpp"
 #include "prx/libSceNKWebKit/include/WebCoreRegistrationSlotsExports.hpp"
 #include "prx/libSceNKWebKit/include/CredentialBaseExports.hpp"
