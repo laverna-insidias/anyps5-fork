@@ -148,6 +148,87 @@ void TestConstructor() {
         Require(object[i] == 0);
 }
 
+struct FakeClient {
+    const void* vptr;
+    void* removed = nullptr;
+    int calls = 0;
+};
+
+FakeClient* g_client = nullptr;
+
+void* APS5_VABI ReturnClient(const void*) {
+    return g_client;
+}
+
+void APS5_VABI WillRemove(void* client, void* track) {
+    auto* fake = static_cast<FakeClient*>(client);
+    fake->removed = track;
+    ++fake->calls;
+}
+
+void APS5_VABI Unexpected(void*) {
+    Require(false);
+}
+
+void TestWillBeRemoved() {
+    const void* clientVtable[6] = {reinterpret_cast<const void*>(&Unexpected), reinterpret_cast<const void*>(&Unexpected), nullptr, nullptr, nullptr, reinterpret_cast<const void*>(&WillRemove)};
+    FakeClient client{clientVtable};
+
+    alignas(8) std::array<std::uint8_t, 16> object;
+    _ZN7WebCore16TrackPrivateBaseC2Ev(object.data());
+    const void* const* baseVtable;
+    std::memcpy(&baseVtable, object.data(), sizeof(baseVtable));
+    std::array<const void*, 8> derived;
+    for (std::size_t i = 0; i < derived.size(); ++i) derived[i] = baseVtable[i];
+    derived[2] = reinterpret_cast<const void*>(&ReturnClient);
+    const void* derivedPointer = derived.data();
+    std::memcpy(object.data(), &derivedPointer, sizeof(derivedPointer));
+
+    g_client = &client;
+    _ZN7WebCore16TrackPrivateBase13willBeRemovedEv(object.data());
+    Require(client.calls == 1 && client.removed == object.data());
+
+    g_client = nullptr;
+    _ZN7WebCore16TrackPrivateBase13willBeRemovedEv(object.data());
+    Require(client.calls == 1);
+}
+
+void TestDestructors() {
+    alignas(8) std::array<std::uint8_t, 16> object;
+    object.fill(0x5a);
+    _ZN7WebCore16TrackPrivateBaseC2Ev(object.data());
+    const std::array<std::uint8_t, 16> constructed = object;
+    _ZN7WebCore16TrackPrivateBaseD1Ev(object.data());
+    Require(object == constructed);
+
+    void* heap = _ZN3WTF10fastMallocEm(16);
+    _ZN7WebCore16TrackPrivateBaseC2Ev(heap);
+    const void* const* vptr;
+    std::memcpy(&vptr, heap, sizeof(vptr));
+    reinterpret_cast<void (APS5_VABI*)(void*)>(const_cast<void*>(vptr[1]))(heap);
+
+    heap = _ZN3WTF10fastMallocEm(16);
+    _ZN7WebCore16TrackPrivateBaseC2Ev(heap);
+    reinterpret_cast<void (APS5_VABI*)(void*)>(const_cast<void*>(vptr[0]))(heap);
+    _ZN7WebCore16TrackPrivateBaseD0Ev(heap);
+}
+
+template<typename TFunction>
+bool ThrowsInvalidArgument(TFunction&& function) {
+    try {
+        function();
+    } catch (const std::invalid_argument&) {
+        return true;
+    }
+    return false;
+}
+
+void TestNullSelf() {
+    Require(ThrowsInvalidArgument([] { _ZN7WebCore16TrackPrivateBaseD0Ev(nullptr); }));
+    Require(ThrowsInvalidArgument([] { _ZN7WebCore16TrackPrivateBaseD1Ev(nullptr); }));
+    Require(ThrowsInvalidArgument([] { _ZN7WebCore16TrackPrivateBase13willBeRemovedEv(nullptr); }));
+}
+
 }
 
 int main() {
@@ -157,5 +238,8 @@ int main() {
     TestEmptyAtom(_ZNK7WebCore16TrackPrivateBase5labelEv);
     TestEmptyAtom(_ZNK7WebCore16TrackPrivateBase8languageEv);
     TestStartTimeVariance();
+    TestWillBeRemoved();
+    TestDestructors();
+    TestNullSelf();
     return 0;
 }

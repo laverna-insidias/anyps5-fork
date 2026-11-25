@@ -26,14 +26,42 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// Derived from neonmodder123/PS5-WebKit-11.x/Source/WebCore/platform/graphics/TrackPrivateBaseClient.h@80f77e94c63ee7202eec3d4b5b1a021dd89011ba
+/*
+ * Copyright (C) 2021 Apple Inc. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #include "prx/libSceNKWebKit/include/TrackPrivateBaseExports.hpp"
 #include "prx/libSceNKWebKit/include/MediaExports.hpp"
 #include "prx/libSceNKWebKit/include/InventoryExports.hpp"
+#include "prx/libSceNKWebKit/include/WtfExports.hpp"
 #include "prx/libc/include/Api.hpp"
 
 #include <cstddef>
 #include <cstdint>
 #include <stdexcept>
+#include <string>
 
 namespace {
 
@@ -69,12 +97,32 @@ static_assert(sizeof(TrackPrivateBase) == 16);
 static_assert(offsetof(TrackPrivateBase, vptr) == 0);
 static_assert(offsetof(TrackPrivateBase, refCount) == 8);
 
-void APS5_VABI CompleteDestructor(void*) {
-    _ZN7WebCore16TrackPrivateBaseD1Ev();
+void APS5_VABI CompleteDestructor(void* self) {
+    _ZN7WebCore16TrackPrivateBaseD1Ev(self);
 }
 
-void APS5_VABI DeletingDestructor(void*) {
-    _ZN7WebCore16TrackPrivateBaseD0Ev();
+void APS5_VABI DeletingDestructor(void* self) {
+    _ZN7WebCore16TrackPrivateBaseD0Ev(self);
+}
+
+struct TrackPrivateBaseClientVtable {
+    void (APS5_VABI* completeDestructor)(void*);
+    void (APS5_VABI* deletingDestructor)(void*);
+    void (APS5_VABI* idChanged)(void*, const void*);
+    void (APS5_VABI* labelChanged)(void*, const void*);
+    void (APS5_VABI* languageChanged)(void*, const void*);
+    void (APS5_VABI* willRemove)(void*, void*);
+};
+
+struct TrackPrivateBaseClient {
+    const TrackPrivateBaseClientVtable* vptr;
+};
+
+static_assert(offsetof(TrackPrivateBaseClientVtable, willRemove) == 40);
+
+TrackPrivateBase& Checked(void* self, const char* function) {
+    if (!self) throw std::invalid_argument(std::string(function) + ": null object");
+    return *static_cast<TrackPrivateBase*>(self);
 }
 
 const TrackPrivateBaseVtableStorage TrackPrivateBaseVtableInstance = {
@@ -117,6 +165,21 @@ NKWebKit::WtfAbi::AtomString APS5_VABI _ZNK7WebCore16TrackPrivateBase8languageEv
 
 WTF::MediaTime APS5_VABI _ZNK7WebCore16TrackPrivateBase17startTimeVarianceEv(const void*) {
     return _ZN3WTF9MediaTime8zeroTimeEv();
+}
+
+void APS5_VABI _ZN7WebCore16TrackPrivateBaseD1Ev(void* self) {
+    Checked(self, "WebCore::TrackPrivateBase::~TrackPrivateBase");
+}
+
+void APS5_VABI _ZN7WebCore16TrackPrivateBaseD0Ev(void* self) {
+    Checked(self, "WebCore::TrackPrivateBase::~TrackPrivateBase");
+    _ZN3WTF8fastFreeEPv(self);
+}
+
+void APS5_VABI _ZN7WebCore16TrackPrivateBase13willBeRemovedEv(void* self) {
+    TrackPrivateBase& base = Checked(self, "WebCore::TrackPrivateBase::willBeRemoved");
+    const auto client = reinterpret_cast<TrackPrivateBaseClient* (APS5_VABI*)(const void*)>(base.vptr->client);
+    if (TrackPrivateBaseClient* trackClient = client(self)) trackClient->vptr->willRemove(trackClient, self);
 }
 
 }
